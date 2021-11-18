@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cozy Cafe</title>
+        <meta name='viewport' content="width=device-width, initial-scale=1.0">
+    </head>
+    <style>
+        #form {
+            position: fixed;
+            display: flex;
+            height: 3rem;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            box-sizing: border-box;
+        }
+        #input {
+            flex-grow: 1;
+            border-radius: 2rem;
+        }
+    </style>
+    <script src='/socket.io/socket.io.js'>
+        var socket = io();
+    </script>
+    <body>
+        <ul id="message"></ul>
+        <form id="form" action="">
+            <input id='input' autocomplete="off"><button>Send</button>
+        </form>
+    </body>
+</html>
