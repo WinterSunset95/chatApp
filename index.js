@@ -2,21 +2,29 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require('socket.io');
+const { Server } = require("socket.io");
 const io = new Server(server);
 
+const session = require('session');
+app.use(session({secret: 'sshhh'}));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected')
-    })
-})
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+  socket.on('chat message', (msg) => {
+    console.log(msg);
+  });
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });   
+});
 
-app.listen(3000, () => {
-    console.log('listening on port 3000');
+server.listen(3000, () => {
+  console.log('Listening on port 3000');
 });

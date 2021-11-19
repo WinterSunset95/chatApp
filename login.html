@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cozy Cafe</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <style>
+        body {
+            display: grid;
+            justify-content: center;
+        }
+        @import url('http://fonts.cdnfonts.com/css/billabong');
+        @font-face {
+            font-family: alienFont;
+            src: url(fonts/A-day-without-sun-trial.otf);
+        }
+
+        @media only screen and (max-width: 600px) {
+        #mainBody {
+            margin: auto;
+            padding: 10px;
+            width: 450px;
+            justify-content: center;
+        }
+        #title {
+            text-align: center;
+            font-family: 'Billabong', sans-serif;
+            font-size: 140px;
+            margin: none;
+        }
+        #title2 {
+            font-size: 35px;
+            font-family: 'alienFont', sans-serif;
+            float: right;
+            margin-right: 20px;
+            margin-top: none;
+            margin-bottom: 100px;
+        }
+        input[type=text] {
+            width: 80%;
+            height: 30px;
+            border-radius: 10px;
+        }
+        input[type=submit] {
+            background-color: rgb(230,230,230);
+            height: 30px;
+            width: 15%;
+            border-radius: 5px;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="mainBody">
+            <div id="title">
+                Cozy Café
+            <div id="title2">
+                For wholesome homies
+            </div>
+            </div>
+            
+            <form method="POST">
+                <input id="name" type="text" name="name" placeholder="Please input a username">
+                <input id="Submit" name="submit" type="submit" value="Chat!">
+        
+            </form>
+            </div>
+            <div style="float: bottom; position: absolute; bottom: 10px;">** If you guys got any ideas for this webapp/site design please tell me XD. My creativity is running out. **</div>
+        
+    </body>
+</html>
