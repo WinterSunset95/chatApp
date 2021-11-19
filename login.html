@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Cozy Cafe</title>
+        <title>Cozy Café</title>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <style>
         body {
             display: grid;
             justify-content: center;
         }
-        @import url('http://fonts.cdnfonts.com/css/billabong');
+        @font-face {
+            font-family: 'Billabong';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Billabong'), url(fonts/Billabong.woff) format('woff');
+}
         @font-face {
             font-family: alienFont;
             src: url(fonts/A-day-without-sun-trial.otf);
         }
-
-        @media only screen and (max-width: 600px) {
         #mainBody {
             margin: auto;
             padding: 10px;
-            width: 450px;
+            width: 100%;
             justify-content: center;
         }
         #title {
             text-align: center;
             font-family: 'Billabong', sans-serif;
-            font-size: 140px;
+            font-size: 100px;
             margin: none;
         }
         #title2 {
@@ -40,11 +43,21 @@
             height: 30px;
             border-radius: 10px;
         }
-        input[type=submit] {
+        input[type=button] {
             background-color: rgb(230,230,230);
             height: 30px;
             width: 15%;
             border-radius: 5px;
+        }
+        @media only screen and (min-width: 400px) {
+        #title {
+            font-size: 120px;
+        }
+        }
+        @media only screen and (min-width: 500px) {
+        #title {
+            font-size: 140px;
+        }
         }
         </style>
     </head>
@@ -57,13 +70,21 @@
             </div>
             </div>
             
-            <form method="POST">
-                <input id="name" type="text" name="name" placeholder="Please input a username">
-                <input id="Submit" name="submit" type="submit" value="Chat!">
+            <form>
+                <input id="name" autocomplete="off" type="text" name="name" placeholder="Please input a username">
+                <input id="Submit" type="button" value="Chat!" onClick="go()">
         
             </form>
             </div>
             <div style="float: bottom; position: absolute; bottom: 10px;">** If you guys got any ideas for this webapp/site design please tell me XD. My creativity is running out. **</div>
-        
+        <script>
+            function go() {
+                var uname = document.getElementById('name').value;
+                sessionStorage.setItem("uname", uname);
+                if(uname) {
+                    window.location.href = '/chat';
+                }
+            }
+        </script>
     </body>
 </html>

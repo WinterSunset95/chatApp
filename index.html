@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Cozy Cafe</title>
+        <title>Cozy Café</title>
         <meta name='viewport' content="width=device-width, initial-scale=1.0">
     </head>
     <style>
@@ -19,6 +19,9 @@
             overflow: auto;
             height: auto;
         }
+        #notification {
+            color: red;
+        }
     </style>
     
     <body>
@@ -32,21 +35,34 @@
 
         <script src="/socket.io/socket.io.js"></script>
         <script>
+            var uname = sessionStorage.getItem('uname');
             var socket = io();
             var message = document.getElementById('messages');
             var input = document.getElementById('input');
-
+            if(uname) {
+                socket.emit('userConnect', uname);
+            }
+            if(!uname) {
+                window.location.href = '/';
+            }
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (input.value) {
-                    socket.emit('chat message', input.value);
+                    socket.emit('chat message', input.value, uname);
                     input.value = '';
                 }
             });
-
-            socket.on('chat message', function(msg) {
+            socket.on('userConnect', user => {
                 var item = document.createElement('li');
-                item.textContent = msg;
+                item.id = "notification";
+                item.textContent = '* '+ user + ' connected *';
+                message.appendChild(item);
+                var element = document.getElementById('trial');
+                element.scrollIntoView();
+            })
+            socket.on('chat message', (msg, name) => {
+                var item = document.createElement('li');
+                item.textContent = name + ': ' + msg;
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
