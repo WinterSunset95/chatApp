@@ -1,0 +1,16 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Logout Page</title>
+	</head>
+	<body>
+		<h5>LogOut successful</h5>
+		<h6>Click <a href="/" target="_blank">here</a> to login again.</h6>
+		<script charset="utf-8">
+			var uname = sessionStorage.getItem('uname');
+			sessionStorage.setItem('uname', '');
+		</script>
+	</body>
+</html>

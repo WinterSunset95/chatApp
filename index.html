@@ -6,7 +6,6 @@
     </head>
     <style>
         body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-
         #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
         #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
         #input:focus { outline: none; }
@@ -22,10 +21,86 @@
         #notification {
             color: red;
         }
+        #sidenav {
+            padding-top: 3rem;
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 3rem;
+            height: 100%;
+            width: 0;
+            max-width: 100vw;
+            background-color: rgba(245, 245, 245, 1);
+            transition: 0.5s;
+            float: right;
+            overflow: auto;
+            padding-bottom: 3rem;
+
+        }
+        #sidenav a {
+            padding: 8px 8px 8px 32px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        #sidenav a:hover {
+            color: black;
+        }
+        #button {
+            display: block;
+            border-radius: 5px;
+            height: 35px;
+            width: 35px;
+            position: fixed;
+            right: 10px;
+            top: 10px;
+        }
+        #frame {
+            height: 0;
+            width: 100%;
+            display: block;
+            z-index: 1;
+            background-color: rgb(235, 235, 235);
+            overflow: auto;
+            transition: 0.5s;
+        }
+        #open {
+            display: block;
+        }
+        #close {
+            display: none;
+        }
+        @media only screen and (min-width: 600px) {
+            #sidenav {
+                width: 400px;
+                max-width: 40vw;
+            }
+            #closebtn {
+                display: none;
+            }
+        }
     </style>
     
     <body>
         <div id='chatArea'>
+            <button id="button" onClick='openNav()'> | | |</button>
+        <div id="sidenav" class="name">
+            <a href="javascript:void(0)" id="closebtn" onclick="closeNav()" style='
+            position: fixed;
+            display: none;
+            float: right;
+            right: 10px;
+            top: 10px;
+            z-index: 2;
+                '>&times;</a>
+            
+            <a href="#" id="open" onClick='openframe()'>Chat Logs</a>
+            <a href="#" id="close" onClick='closeframe()' style='display: none;'>Chat Logs</a>
+            <iframe id="frame" src="/chat.log" frameborder="0"></iframe>
+            <a href="/logout">Logout</a>
+            
+        </div>
         <ul id="messages"></ul>
         <form id="form" action="">
             <input id='input' autocomplete="off"><button>Send</button>
@@ -67,6 +142,29 @@
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
             });
+            function openNav() {
+                document.getElementById('sidenav').style.width = '400px';
+                button.style.display = 'none';
+                document.getElementById('closebtn').style.display = 'block';
+            }
+            function closeNav() {
+                document.getElementById('sidenav').style.width = '0';
+                button.style.display = 'block';
+                document.getElementById('closebtn').style.display = 'none';
+                document.getElementById('frame').style.display = 'none';
+            }
+            function openframe() {
+                document.getElementById('frame').style.height = '50%';
+                document.getElementById('close').style.display = 'block';
+                document.getElementById('open').style.display = 'none';
+            }
+            function closeframe() {
+                document.getElementById('frame').style.height = '0';  
+                document.getElementById('open').style.display = 'block';
+                document.getElementById('close').style.display = 'none';
+            }
+
+
         </script>
     </body>
 </html>

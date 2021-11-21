@@ -70,21 +70,21 @@
             </div>
             </div>
             
-            <form>
-                <input id="name" autocomplete="off" type="text" name="name" placeholder="Please input a username">
-                <input id="Submit" type="button" value="Chat!" onClick="go()">
+            <form id='form' action='/chat'>
+                <input id="name" autocomplete="off" type="text" name="uname" placeholder="Please input a username">
+                <input id="Submit" type="button" value="Chat!">
         
             </form>
             </div>
             <div style="float: bottom; position: absolute; bottom: 10px;">** If you guys got any ideas for this webapp/site design please tell me XD. My creativity is running out. **</div>
         <script>
-            function go() {
+            document.getElementById('form').addEventListener('submit', function() {
                 var uname = document.getElementById('name').value;
                 sessionStorage.setItem("uname", uname);
                 if(uname) {
-                    window.location.href = '/chat';
+                    window.location.href = "/chat";
                 }
-            }
+            });
         </script>
     </body>
 </html>

@@ -13,6 +13,10 @@ app.get('/chat', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/logout', (req, res) => {
+  res.sendFile(__dirname + '/logout.html');
+});
+
 io.on('connection', (socket) => {
   socket.on('userConnect', (user) => {
     console.log(user, ' connected');
