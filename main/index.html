@@ -118,7 +118,7 @@
                 socket.emit('userConnect', uname);
             }
             if(!uname) {
-                window.location.href = '/';
+                window.location.href = '/login';
             }
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -141,6 +141,7 @@
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
+                load();
             });
             function openNav() {
                 document.getElementById('sidenav').style.width = '400px';
@@ -151,7 +152,6 @@
                 document.getElementById('sidenav').style.width = '0';
                 button.style.display = 'block';
                 document.getElementById('closebtn').style.display = 'none';
-                document.getElementById('frame').style.display = 'none';
             }
             function openframe() {
                 document.getElementById('frame').style.height = '50%';
@@ -163,8 +163,10 @@
                 document.getElementById('open').style.display = 'block';
                 document.getElementById('close').style.display = 'none';
             }
-
-
+            function load() {
+                var iframe = document.getElementById('frame');
+                iframe.src = iframe.src;
+            }
         </script>
     </body>
 </html>

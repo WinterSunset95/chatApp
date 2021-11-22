@@ -5,16 +5,16 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/login.html');
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/main/login.html');
 });
 
 app.get('/chat', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/main/index.html');
 });
 
 app.get('/logout', (req, res) => {
-  res.sendFile(__dirname + '/logout.html');
+  res.sendFile(__dirname + '/main/logout.html');
 });
 
 io.on('connection', (socket) => {
@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
      
 });
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/main'));
 
 server.listen(3000, () => {
   console.log('Listening on port 3000');
