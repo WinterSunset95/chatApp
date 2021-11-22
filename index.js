@@ -22,12 +22,12 @@ app.get('/logout', (req, res) => {
 io.on('connection', (socket) => {
   socket.on('userConnect', (user) => {
     users.push(user);
-    console.log(users);
     console.log(user, ' connected');
-    io.emit('userConnect', (user));
+    io.emit('userConnect', user, users);
+    
   });
- socket.on('chat message', (msg, name) => {
-    io.emit('chat message', msg, name);
+  socket.on('chat message', (msg, name) => {
+    socket.emit('chat message', msg, name, users);
     console.log(name, msg);
   });
      

@@ -14,6 +14,9 @@
         #messages { list-style-type: none; margin: 0; padding: 0; }
         #messages > li { padding: 0.5rem 1rem; }
         #messages > li:nth-child(odd) { background: #efefef; }
+        #users { list-style-type: none; margin: 0; padding: 0; }
+        #users > li { padding: 0.5rem 1rem; }
+        
         #chatArea {
             overflow: auto;
             height: auto;
@@ -65,11 +68,20 @@
             overflow: auto;
             transition: 0.5s;
         }
-        #open {
+        #open, #userLopen {
             display: block;
         }
-        #close {
+        #close, #userLclose {
             display: none;
+        }
+        #userPage {
+            height: 0;
+            width: 100%;
+            display: block;
+            z-index: 1;
+            background-color: rgb(235, 235, 235);
+            overflow: auto;
+            transition: 0.5s;            
         }
         @media only screen and (min-width: 600px) {
             #sidenav {
@@ -94,7 +106,13 @@
             top: 10px;
             z-index: 2;
                 '>&times;</a>
-            
+            <a href="#" id='userLopen' onClick='userLopen()'>Online Users</a>
+            <a href="#" id="userLclose" onClick='userLclose()' style='display: none;'>Online Users</a>
+            <div id="userPage">
+                <ul id="people">
+                    
+                </ul>
+            </div>
             <a href="#" id="open" onClick='openframe()'>Chat Logs</a>
             <a href="#" id="close" onClick='closeframe()' style='display: none;'>Chat Logs</a>
             <iframe id="frame" src="/chat.log" frameborder="0"></iframe>
@@ -114,6 +132,9 @@
             var socket = io();
             var message = document.getElementById('messages');
             var input = document.getElementById('input');
+            if(uname) {
+                socket.emit('userConnect', uname);
+            }
             if(!uname) {
                 window.location.href = '/login';
             }
@@ -124,20 +145,22 @@
                     input.value = '';
                 }
             });
-            socket.on('userConnect', user => {
+            socket.on('userConnect', (user, users) => {
                 var item = document.createElement('li');
                 item.id = "notification";
                 item.textContent = '* '+ user + ' connected *';
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
+                createUser(users);
             })
-            socket.on('chat message', (msg, name) => {
+            socket.on('chat message', (msg, name, users) => {
                 var item = document.createElement('li');
                 item.textContent = name + ': ' + msg;
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
+                console.log(users);
                 load();
             });
             function openNav() {
@@ -160,9 +183,28 @@
                 document.getElementById('open').style.display = 'block';
                 document.getElementById('close').style.display = 'none';
             }
+            function userLopen() {
+                document.getElementById('userPage').style.height = '50%';
+                document.getElementById('userLclose').style.display = 'block';
+                document.getElementById('userLopen').style.display = 'none';
+            }
+            function userLclose() {
+                document.getElementById('userPage').style.height = '0';  
+                document.getElementById('userLopen').style.display = 'block';
+                document.getElementById('userLclose').style.display = 'none';
+            }
             function load() {
                 var iframe = document.getElementById('frame');
                 iframe.src = iframe.src;
+            }
+            function createUser(array) {
+                for (let i = 0; i < array.length; i++) {
+                    text = '';
+                    text += array[i];
+                    var userItem = document.createElement('a');
+                    userItem.textContent = text;
+                    document.getElementById('userPage').appendChild(userItem);
+                }
             }
         </script>
     </body>
