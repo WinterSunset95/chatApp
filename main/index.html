@@ -114,9 +114,6 @@
             var socket = io();
             var message = document.getElementById('messages');
             var input = document.getElementById('input');
-            if(uname) {
-                socket.emit('userConnect', uname);
-            }
             if(!uname) {
                 window.location.href = '/login';
             }
