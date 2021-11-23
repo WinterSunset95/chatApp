@@ -132,6 +132,7 @@
             var socket = io();
             var message = document.getElementById('messages');
             var input = document.getElementById('input');
+            const userData = {name: '', id: ''};
             if(uname) {
                 socket.emit('userConnect', uname);
             }
@@ -145,10 +146,12 @@
                     input.value = '';
                 }
             });
-            socket.on('userConnect', (user, users) => {
+            socket.on('userConnect', (userdata, users) => {
                 var item = document.createElement('li');
                 item.id = "notification";
-                item.textContent = '* '+ user + ' connected *';
+                userData.name = userdata.name;
+                userData.id = userdata.id;
+                item.textContent = '* '+ userData.name + ' connected *';
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
@@ -198,6 +201,7 @@
                 iframe.src = iframe.src;
             }
             function createUser(array) {
+                document.getElementById('userPage').innerHTML = "";
                 for (let i = 0; i < array.length; i++) {
                     text = '';
                     text += array[i];

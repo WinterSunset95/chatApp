@@ -85,7 +85,6 @@
                 var uname = document.getElementById('name').value;
                 sessionStorage.setItem("uname", uname);
                 if(uname) {
-                    socket.emit('userConnect', uname);
                     window.location.href = "/chat";
                 }
             }
