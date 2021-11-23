@@ -132,7 +132,7 @@
             var socket = io();
             var message = document.getElementById('messages');
             var input = document.getElementById('input');
-            const userData = {name: '', id: ''};
+            const pageArray = [];
             if(uname) {
                 socket.emit('userConnect', uname);
             }
@@ -146,24 +146,30 @@
                     input.value = '';
                 }
             });
-            socket.on('userConnect', (userdata, users) => {
+            socket.on('userConnect', (userArray, name, ssid) => {
                 var item = document.createElement('li');
                 item.id = "notification";
-                userData.name = userdata.name;
-                userData.id = userdata.id;
-                item.textContent = '* '+ userData.name + ' connected *';
+                item.textContent = '* '+ name + ' connected *';
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
-                createUser(users);
-            })
-            socket.on('chat message', (msg, name, users) => {
+                console.log(userArray, ssid);
+                createUser(userArray, ssid);
+            });
+            socket.on('userdisconn', (userArray, name, ssid) => {
+                var item = document.createElement('li');
+                item.id = "notification";
+                item.textContent = '* '+ name + ' disconnected *';
+                message.appendChild(item);
+                var element = document.getElementById('trial');
+                element.scrollIntoView();
+            });
+            socket.on('chat message', (msg, name) => {
                 var item = document.createElement('li');
                 item.textContent = name + ': ' + msg;
                 message.appendChild(item);
-                var element = document.getElementById('trial');
+                var element = documenit.getElementById('trial');
                 element.scrollIntoView();
-                console.log(users);
                 load();
             });
             function openNav() {
@@ -204,7 +210,11 @@
                 document.getElementById('userPage').innerHTML = "";
                 for (let i = 0; i < array.length; i++) {
                     text = '';
-                    text += array[i];
+                    var current = array[i];
+                    console.log(current);
+                    var online = current.name;
+                    console.log(online);
+                    text += online;
                     var userItem = document.createElement('a');
                     userItem.textContent = text;
                     document.getElementById('userPage').appendChild(userItem);

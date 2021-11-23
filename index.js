@@ -5,7 +5,11 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-var users = ['hehe', 'wallass', 'dyrroth'];
+var userArray = [];
+function userObj(name, ssid) {
+  this.name = name;
+  this.id = ssid;
+}
 
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/main/login.html');
@@ -21,22 +25,37 @@ app.get('/logout', (req, res) => {
 
 io.on('connection', (socket) => {
   socket.on('userConnect', (user) => {
-    users.push(user);
     console.log(user, ' connected, ID- ', socket.id);
-    const userdata = {
-      name: user,
-      id: socket.id,
-    };
-    io.emit('userConnect', userdata, users);
+    name = user;
+    socketId = socket.id;
+    userArray.push(new function () {
+      this.name = name;
+      this.id = socketId;
+    });
+    io.emit('userConnect', userArray, name, socketId);
     
   });
   socket.on('chat message', (msg, name) => {
-    socket.emit('chat message', msg, name, users);
+    io.emit('chat message', msg, name);
     console.log(name, msg);
   });
-     
+  socket.on('disconnect', () => {
+    try {
+      id = socket.id;
+      var dcon = userArray.find(dcon => dcon.id === id);
+      console.log(dcon);
+      var user = dcon.name;
+      console.log(user, ' disconnected, ID- ', id);
+      var ind = userArray.indexOf(dcon);
+      userArray.pop(ind);
+      io.emit('userdisconn', userArray, user, id);
+  }
+    catch (err) {
+      console.log('err-');
+    }
+  })
+  
 });
-
 app.use(express.static(__dirname + '/main'));
 
 server.listen(3000, () => {
