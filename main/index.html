@@ -127,12 +127,14 @@
         </div>
 
         <script src="/socket.io/socket.io.js"></script>
+        <script src="/eruda.js"></script>
         <script>
+            eruda.init();
             var uname = sessionStorage.getItem('uname');
             var socket = io();
             var message = document.getElementById('messages');
             var input = document.getElementById('input');
-            const pageArray = [];
+            const userArray = [];
             if(uname) {
                 socket.emit('userConnect', uname);
             }
@@ -146,23 +148,32 @@
                     input.value = '';
                 }
             });
-            socket.on('userConnect', (userArray, name, ssid) => {
+            socket.on('userConnect', (name, ssid) => {
                 var item = document.createElement('li');
                 item.id = "notification";
                 item.textContent = '* '+ name + ' connected *';
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
+                userArray.push(new function () {
+                    this.name = name;
+                    this.id = ssid;
+                });
                 console.log(userArray, ssid);
-                createUser(userArray, ssid);
+                createUser(userArray);
             });
-            socket.on('userdisconn', (userArray, name, ssid) => {
+            socket.on('userdisconn', ssid => {
+                var discon = userArray.find(discon => discon.id === ssid);
+                console.log(discon);
+                var ind = userArray.indexOf(discon);
+                userArray.pop(ind);
                 var item = document.createElement('li');
                 item.id = "notification";
-                item.textContent = '* '+ name + ' disconnected *';
+                item.textContent = '* '+ discon + ' disconnected *';
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
+                createUser(userArray);
             });
             socket.on('chat message', (msg, name) => {
                 var item = document.createElement('li');

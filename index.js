@@ -5,12 +5,6 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-var userArray = [];
-function userObj(name, ssid) {
-  this.name = name;
-  this.id = ssid;
-}
-
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/main/login.html');
 });
@@ -28,11 +22,7 @@ io.on('connection', (socket) => {
     console.log(user, ' connected, ID- ', socket.id);
     name = user;
     socketId = socket.id;
-    userArray.push(new function () {
-      this.name = name;
-      this.id = socketId;
-    });
-    io.emit('userConnect', userArray, name, socketId);
+    io.emit('userConnect', name, socketId);
     
   });
   socket.on('chat message', (msg, name) => {
@@ -41,14 +31,8 @@ io.on('connection', (socket) => {
   });
   socket.on('disconnect', () => {
     try {
-      id = socket.id;
-      var dcon = userArray.find(dcon => dcon.id === id);
-      console.log(dcon);
-      var user = dcon.name;
-      console.log(user, ' disconnected, ID- ', id);
-      var ind = userArray.indexOf(dcon);
-      userArray.pop(ind);
-      io.emit('userdisconn', userArray, user, id);
+      console.log(socket.id, ' disconnected');
+      io.emit('userdisconn', socket.id);
   }
     catch (err) {
       console.log('err-');
