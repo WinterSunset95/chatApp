@@ -21,26 +21,6 @@ app.get('/logout', (req, res) => {
 io.on('connection', (socket) => {
   socket.on('userConnect', (user) => {
     console.log('userconnect event')
-    console.log('A user by the name ', user, ' conencted.');
-    console.log('Attempting to remove any other users by that same name')
-    try {
-      let torm = userArray.find(torm => torm.name === user);
-      console.log('variable torm, ', torm);
-      let ind = userArray.indexOf(torm);
-      console.log('ind is, ', ind);
-      if (ind == -1) {
-        console.log('no user removed')
-      }
-      else {
-        console.log('ind, ', ind);
-        userArray.splice(ind, 1);
-        console.log(torm, ' removed from userArray');
-        console.log('current userArray, ', userArray);
-      }
-    }
-    catch (err) {
-      console.log('no user removed');
-    }
     console.log(user, ' connected, ID- ', socket.id);
     var name = user;
     var socketId = socket.id;
@@ -56,15 +36,19 @@ io.on('connection', (socket) => {
   });
   socket.on('disconnect', () => {
     try {
+      console.log('disconnect event');
       console.log(socket.id, ' disconnected');
       let ssid = socket.id;
       let discon = userArray.find(discon => discon.socketId === ssid);
       let name = discon.name;
+      let ind = userArray.indexOf(discon);
+      userArray.splice(ind, 1);
       console.log(name, 'disconnected');
+      console.log('current userArray', userArray);
       io.emit('userdisconn', name, ssid, userArray);
   }
     catch (err) {
-      console.log('err-');
+      console.log('User is not found so not removed');
     }
   })
   
