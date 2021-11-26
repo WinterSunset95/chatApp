@@ -5,6 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
+const userArray = [];
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/main/login.html');
 });
@@ -19,10 +20,34 @@ app.get('/logout', (req, res) => {
 
 io.on('connection', (socket) => {
   socket.on('userConnect', (user) => {
+    console.log('userconnect event')
+    console.log('A user by the name ', user, ' conencted.');
+    console.log('Attempting to remove any other users by that same name')
+    try {
+      let torm = userArray.find(torm => torm.name === user);
+      console.log('variable torm, ', torm);
+      let ind = userArray.indexOf(torm);
+      console.log('ind is, ', ind);
+      if (ind == -1) {
+        console.log('no user removed')
+      }
+      else {
+        console.log('ind, ', ind);
+        userArray.splice(ind, 1);
+        console.log(torm, ' removed from userArray');
+        console.log('current userArray, ', userArray);
+      }
+    }
+    catch (err) {
+      console.log('no user removed');
+    }
     console.log(user, ' connected, ID- ', socket.id);
-    name = user;
-    socketId = socket.id;
-    io.emit('userConnect', name, socketId);
+    var name = user;
+    var socketId = socket.id;
+    userArray.push({name, socketId});
+    console.log('user added');
+    console.log('curent userArray, ', userArray);
+    io.emit('userConnect', name, socketId, userArray);
     
   });
   socket.on('chat message', (msg, name) => {
@@ -32,7 +57,11 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     try {
       console.log(socket.id, ' disconnected');
-      io.emit('userdisconn', socket.id);
+      let ssid = socket.id;
+      let discon = userArray.find(discon => discon.socketId === ssid);
+      let name = discon.name;
+      console.log(name, 'disconnected');
+      io.emit('userdisconn', name, ssid, userArray);
   }
     catch (err) {
       console.log('err-');

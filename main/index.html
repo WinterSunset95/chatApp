@@ -134,7 +134,6 @@
             var socket = io();
             var message = document.getElementById('messages');
             var input = document.getElementById('input');
-            const userArray = [];
             if(uname) {
                 socket.emit('userConnect', uname);
             }
@@ -148,28 +147,19 @@
                     input.value = '';
                 }
             });
-            socket.on('userConnect', (name, ssid) => {
+            socket.on('userConnect', (name, ssid, userArray) => {
                 var item = document.createElement('li');
                 item.id = "notification";
                 item.textContent = '* '+ name + ' connected *';
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
-                userArray.push(new function () {
-                    this.name = name;
-                    this.id = ssid;
-                });
-                console.log(userArray, ssid);
                 createUser(userArray);
             });
-            socket.on('userdisconn', ssid => {
-                var discon = userArray.find(discon => discon.id === ssid);
-                console.log(discon);
-                var ind = userArray.indexOf(discon);
-                userArray.pop(ind);
+            socket.on('userdisconn', (name, ssid, userArray) => {
                 var item = document.createElement('li');
                 item.id = "notification";
-                item.textContent = '* '+ discon + ' disconnected *';
+                item.textContent = '* '+ name + ' disconnected *';
                 message.appendChild(item);
                 var element = document.getElementById('trial');
                 element.scrollIntoView();
